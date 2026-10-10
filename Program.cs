@@ -10,19 +10,82 @@ builder.Services.AddHttpClient("Ollama", client =>
 });
 
 var app = builder.Build();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 
 // -------------------------------------------------------
 // STATUS
 // -------------------------------------------------------
 
-app.MapGet("/", () => Results.Ok(new
-{
-    app = "GrassQuest Local",
-    status = "running",
-    ai = "Gemma 3 via Ollama"
-}));
+app.MapGet("/", () => Results.Redirect("/index.html"));
 
+app.MapGet("/api/status", async (
+    IHttpClientFactory httpClientFactory) =>
+{
+    try
+    {
+        var client =
+            httpClientFactory.CreateClient("Ollama");
+
+        using var response =
+            await client.GetAsync("/api/tags");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return Results.Ok(new
+            {
+                available = false,
+                modelInstalled = false,
+                model = "gemma3:4b",
+                message = "Ollama is not responding."
+            });
+        }
+
+        var tags = await response.Content
+            .ReadFromJsonAsync<OllamaTagsResponse>();
+
+        var installed = tags?.Models?.Any(model =>
+            model.Name.Equals(
+                "gemma3:4b",
+                StringComparison.OrdinalIgnoreCase)
+            ||
+            model.Name.StartsWith(
+                "gemma3:4b:",
+                StringComparison.OrdinalIgnoreCase)
+        ) ?? false;
+
+        return Results.Ok(new
+        {
+            available = true,
+            modelInstalled = installed,
+            model = "gemma3:4b",
+            message = installed
+                ? "Gemma 3 4B is ready on this computer."
+                : "Ollama is running, but Gemma 3 4B is not installed."
+        });
+    }
+    catch (HttpRequestException)
+    {
+        return Results.Ok(new
+        {
+            available = false,
+            modelInstalled = false,
+            model = "gemma3:4b",
+            message = "Ollama is unavailable. Start Ollama and try again."
+        });
+    }
+    catch (TaskCanceledException)
+    {
+        return Results.Ok(new
+        {
+            available = false,
+            modelInstalled = false,
+            model = "gemma3:4b",
+            message = "The Ollama status check timed out."
+        });
+    }
+});
 
 // -------------------------------------------------------
 // GENERATE QUEST
@@ -483,4 +546,16 @@ public class OllamaChatResponse
 {
     [JsonPropertyName("message")]
     public OllamaMessage? Message { get; set; }
+}
+
+public class OllamaTagsResponse
+{
+    [JsonPropertyName("models")]
+    public List<OllamaModelTag>? Models { get; set; }
+}
+
+public class OllamaModelTag
+{
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = "";
 }

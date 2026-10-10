@@ -1,0 +1,336 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#315b3b">
+    <meta name="description"
+          content="Create a personalized outdoor micro-adventure with local AI, then take it offline.">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>GrassQuest Local — Go Outside</title>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="icon" href="/grassquest-icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icons/grassquest-192.png">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+</head>
+<body>
+
+<header class="topbar">
+    <a class="brand" href="/" aria-label="GrassQuest Local home">
+        <span class="brand-icon">🌱</span>
+        <span class="brand-name">GrassQuest <span>LOCAL</span></span>
+    </a>
+
+    <div class="topbar-actions">
+        <button id="installButton" class="secondary-button install-button" type="button" hidden>
+            Install app ↓
+        </button>
+        <div class="status-area">
+        <div id="localStatus"
+             class="status-pill status-checking"
+             role="status"
+             aria-live="polite">
+            <span class="status-dot"></span>
+            <span id="localStatusLabel">CHECKING LOCAL AI</span>
+        </div>
+        <p id="localStatusMessage">Checking this computer...</p>
+        </div>
+    </div>
+</header>
+
+<main class="page-shell">
+
+    <section class="hero">
+        <span class="eyebrow">
+            <span>HACKTOBERFEST</span>
+            <span class="eyebrow-separator">/</span>
+            <span>WEEK 1: TOUCH GRASS</span>
+        </span>
+
+        <h1>A little less scrolling.<br>
+            <span>A little more outside.</span>
+        </h1>
+
+        <p class="hero-description">
+            Tell us how much time you have. Your local AI will create
+            a tiny outdoor adventure worth stepping away for.
+        </p>
+
+        <div class="hero-note">
+            <span>☀️</span>
+            <span>No perfect plans. No special equipment. Just go.</span>
+        </div>
+    </section>
+
+    <section class="builder-layout">
+
+        <form id="questForm" class="builder-card">
+
+            <div class="card-heading">
+                <div>
+                    <span class="step-label">YOUR NEXT ADVENTURE</span>
+                    <h2>Build your quest</h2>
+                </div>
+                <span class="heading-leaf">✳</span>
+            </div>
+
+            <fieldset class="field-group">
+                <legend>How much time do you have?</legend>
+                <div class="choice-row duration-choices">
+                    <button type="button" class="choice-button"
+                            data-duration="10" aria-pressed="false">10 min</button>
+                    <button type="button" class="choice-button selected"
+                            data-duration="20" aria-pressed="true">20 min</button>
+                    <button type="button" class="choice-button"
+                            data-duration="30" aria-pressed="false">30 min</button>
+                    <button type="button" class="choice-button"
+                            data-duration="45" aria-pressed="false">45 min</button>
+                </div>
+            </fieldset>
+
+            <fieldset class="field-group">
+                <legend>Where are you heading?</legend>
+                <label class="select-wrap" for="environment">
+                    <span class="select-icon">📍</span>
+                    <select id="environment" name="environment">
+                        <option value="neighborhood">Neighborhood</option>
+                        <option value="park">Park</option>
+                        <option value="garden">Garden</option>
+                        <option value="trail">Trail</option>
+                        <option value="beach">Beach</option>
+                    </select>
+                    <span class="select-arrow">⌄</span>
+                </label>
+            </fieldset>
+
+            <fieldset class="field-group">
+                <legend>What do you feel like doing?</legend>
+                <div class="goal-grid">
+                    <button type="button" class="goal-button"
+                            data-goal="move" aria-pressed="false">
+                        <span class="goal-icon">👟</span>
+                        <span class="goal-title">Move</span>
+                        <span class="goal-subtitle">Get moving</span>
+                    </button>
+
+                    <button type="button" class="goal-button"
+                            data-goal="explore" aria-pressed="false">
+                        <span class="goal-icon">🧭</span>
+                        <span class="goal-title">Explore</span>
+                        <span class="goal-subtitle">Try something new</span>
+                    </button>
+
+                    <button type="button" class="goal-button selected"
+                            data-goal="notice-nature" aria-pressed="true">
+                        <span class="goal-icon">🍃</span>
+                        <span class="goal-title">Notice nature</span>
+                        <span class="goal-subtitle">Look closer</span>
+                    </button>
+
+                    <button type="button" class="goal-button"
+                            data-goal="clear-my-head" aria-pressed="false">
+                        <span class="goal-icon">☁️</span>
+                        <span class="goal-title">Clear my head</span>
+                        <span class="goal-subtitle">Take it easy</span>
+                    </button>
+                </div>
+            </fieldset>
+
+            <fieldset class="field-group">
+                <legend>Choose your pace</legend>
+                <div class="choice-row">
+                    <button type="button" class="choice-button selected"
+                            data-level="easy" aria-pressed="true">Easy</button>
+                    <button type="button" class="choice-button"
+                            data-level="normal" aria-pressed="false">Normal</button>
+                    <button type="button" class="choice-button"
+                            data-level="active" aria-pressed="false">Active</button>
+                </div>
+            </fieldset>
+
+            <fieldset class="field-group companion-group">
+                <legend>Who's coming along?</legend>
+                <div class="choice-row">
+                    <button type="button" class="choice-button selected"
+                            data-companion="solo" aria-pressed="true">🙋 Solo</button>
+                    <button type="button" class="choice-button"
+                            data-companion="with-someone" aria-pressed="false">🧑‍🤝‍🧑 With someone</button>
+                </div>
+            </fieldset>
+
+            <button id="generateButton" class="primary-button" type="submit">
+                <span>Generate my quest</span>
+                <span class="button-arrow">↗</span>
+            </button>
+
+            <p class="form-footnote">
+                ✳ Made on your computer with Gemma. No account needed.
+            </p>
+
+            <p id="errorMessage" class="error-message" role="alert" hidden></p>
+        </form>
+
+        <aside class="side-column">
+
+            <div class="manifesto-card">
+                <span class="manifesto-sun">☀</span>
+                <p class="manifesto-kicker">THE GRASSQUEST RULE</p>
+                <h2>The screen should be the shortest part of your adventure.</h2>
+                <div class="manifesto-divider"></div>
+                <div class="mini-step">
+                    <span>01</span>
+                    <p>Pick your vibe.</p>
+                </div>
+                <div class="mini-step">
+                    <span>02</span>
+                    <p>Get a tiny outdoor mission.</p>
+                </div>
+                <div class="mini-step">
+                    <span>03</span>
+                    <p>Put your phone away. Go explore.</p>
+                </div>
+                <div class="manifesto-decoration" aria-hidden="true">✳</div>
+            </div>
+
+            <div class="local-card">
+                <span class="local-card-icon">🔒</span>
+                <div>
+                    <h3>Your adventure stays local.</h3>
+                    <p>Gemma runs through Ollama on this computer.
+                       Your preferences don't need a cloud AI service.</p>
+                </div>
+            </div>
+
+            <p class="safety-note">
+                <span>🌿</span>
+                Stay aware of traffic, weather and your surroundings.
+                Skip anything that doesn't feel safe.
+            </p>
+        </aside>
+    </section>
+
+    <section id="resultSection" class="result-section" hidden>
+
+        <div id="offlineNotice" class="offline-notice" role="status" hidden>
+            <span aria-hidden="true">✓</span> This saved quest works offline. New AI quests need GrassQuest and Ollama running on this computer.
+        </div>
+
+        <div class="result-heading">
+            <div>
+                <span class="step-label">YOUR ADVENTURE AWAITS</span>
+                <h2>Your quest is ready<span class="green-period">.</span></h2>
+                <p>Read it once, remember the idea, and head outside.</p>
+            </div>
+            <span class="result-sprout" aria-hidden="true">🌿</span>
+        </div>
+
+        <section class="pocket-bar" aria-label="Outdoor mission controls">
+            <div class="timer-copy">
+                <span class="step-label">MISSION TIMER</span>
+                <strong id="timerDisplay" class="timer-display" aria-live="off">20:00</strong>
+                <span id="timerStatus" class="timer-status" role="status">Ready when you are.</span>
+            </div>
+            <div class="timer-controls">
+                <button id="timerStartPauseButton" class="primary-button timer-button" type="button">Start timer</button>
+                <button id="timerResetButton" class="secondary-button timer-button" type="button">Reset</button>
+                <button id="exitPocketModeButton" class="secondary-button timer-button" type="button" hidden>Exit Pocket Mode</button>
+            </div>
+        </section>
+
+        <article class="quest-card">
+            <div class="quest-card-top">
+                <span class="quest-label"><span>✳</span> GRASSQUEST</span>
+                <span id="resultDuration" class="duration-badge">20 MINUTES</span>
+            </div>
+
+            <h3 id="questTitle">Your outdoor quest</h3>
+            <p id="questIntro" class="quest-intro"></p>
+
+            <div class="quest-divider"></div>
+
+            <div class="task-heading-row">
+                <h4 class="section-label">YOUR FIVE MISSIONS</h4>
+                <span id="taskProgress" class="task-progress-label">0 of 5 complete</span>
+            </div>
+            <ol id="tasksList" class="task-list"></ol>
+            <div class="task-progress-track">
+                <div id="taskProgressBar" class="task-progress-bar"></div>
+            </div>
+            <div id="completionBanner" class="completion-banner" role="status" hidden>
+                <span aria-hidden="true">🌿</span>
+                <div>
+                    <strong>Quest complete.</strong> You showed up, stepped outside, and made the time yours.
+                </div>
+            </div>
+
+            <div class="quest-bottom">
+                <span>✳</span>
+                <span>There is no perfect way to explore. Make it your own.</span>
+            </div>
+        </article>
+
+        <article class="bingo-card">
+            <div class="bingo-heading">
+                <div>
+                    <span class="step-label">LOOK A LITTLE CLOSER</span>
+                    <h3>Outside Bingo</h3>
+                    <p>Notice any of these along the way. Tap a square when you spot it.</p>
+                </div>
+                <span class="bingo-emoji">🔎</span>
+            </div>
+
+            <div id="bingoGrid" class="bingo-grid"
+                 role="group" aria-label="Outside Bingo discoveries"></div>
+
+            <div class="bingo-footer">
+                <span id="bingoProgress">0 of 9 discovered</span>
+                <div class="progress-track" aria-hidden="true">
+                    <div id="bingoProgressBar" class="progress-bar"></div>
+                </div>
+            </div>
+        </article>
+
+        <article class="reflection-card">
+            <span class="reflection-icon">🌱</span>
+            <div>
+                <span class="step-label">WHEN YOU GET BACK</span>
+                <h3 id="returnQuestion">What did you notice today?</h3>
+                <p>No need to record everything. Just remember one little thing.</p>
+            </div>
+        </article>
+
+        <div class="result-actions">
+            <button id="pocketModeButton" class="secondary-button" type="button">
+                ☀ Pocket Mode
+            </button>
+            <button id="shareButton" class="secondary-button" type="button">
+                ↗ Share quest
+            </button>
+            <button id="downloadButton" class="secondary-button" type="button">
+                ↓ Download quest
+            </button>
+            <button id="printButton" class="secondary-button" type="button">
+                Print quest
+            </button>
+            <button id="newQuestButton" class="primary-button compact-button" type="button">
+                Make another quest ↗
+            </button>
+        </div>
+        <p id="actionMessage" class="action-message" role="status" aria-live="polite"></p>
+
+        <p class="leave-screen-note">Your quest is ready. Now the best part happens outside.</p>
+    </section>
+
+</main>
+
+<footer class="site-footer">
+    <span>🌱 GrassQuest Local</span>
+    <span>Powered by open-weight AI · Built for Touch Grass</span>
+</footer>
+
+</body>
+</html>

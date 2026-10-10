@@ -1,0 +1,33 @@
+{
+  "id": "/",
+  "name": "GrassQuest Local",
+  "short_name": "GrassQuest",
+  "description": "A tiny outdoor adventure, generated locally and ready to take offline.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f7f7ef",
+  "theme_color": "#315b3b",
+  "categories": ["lifestyle", "health", "utilities"],
+  "icons": [
+    {
+      "src": "/icons/grassquest-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/grassquest-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/grassquest-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
